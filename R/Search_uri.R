@@ -26,7 +26,7 @@ Search_uri <- function(index=NULL, type=NULL, q=NULL, df=NULL, analyzer=NULL,
       search_type = search_type,
       lowercase_expanded_terms = lowercase_expanded_terms,
       analyze_wildcard = analyze_wildcard, version = as_log(version), q = q,
-      lenient = as_log(lenient))), raw, asdf, stream_opts, ...)
+      raw, asdf, stream_opts, ...)
 }
 
 search_GET <- function(path, index=NULL, type=NULL, args, raw, asdf, 

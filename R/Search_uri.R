@@ -25,7 +25,7 @@ Search_uri <- function(index=NULL, type=NULL, q=NULL, df=NULL, analyzer=NULL,
       terminate_after = cn(terminate_after), from = cn(from), size = cn(size),
       search_type = search_type,
       lowercase_expanded_terms = lowercase_expanded_terms,
-      analyze_wildcard = analyze_wildcard, version = as_log(version), q = q,
+      analyze_wildcard = analyze_wildcard, version = as_log(version), q = q)),
       raw, asdf, stream_opts, ...)
 }
 
@@ -47,7 +47,6 @@ search_GET <- function(path, index=NULL, type=NULL, args, raw, asdf,
   tt <- GET(url, query = args, make_up(), es_env$headers, ...)
   geterror(tt)
   res <- cont_utf8(tt)
-  #if (raw) res else jsonlite::fromJSON(res, asdf)
   
   if (raw) {
     res 

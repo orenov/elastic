@@ -35,6 +35,8 @@ Search <- function(index=NULL, type=NULL, q=NULL, df=NULL, analyzer=NULL,
       scroll = time_scroll, lenient = as_log(lenient))), body, raw, asdf, 
     stream_opts, ...)
   if (!is.null(time_scroll)) attr(tmp, "scroll") <- time_scroll
+  # //TODO remember Search
+  tmp$hits$total <- tmp$hits$total$value
   return(tmp)
 }
 

@@ -81,10 +81,21 @@ connect <- function(es_host = "127.0.0.1", es_port = 9200, es_path = NULL,
              "this pkg.\nuse 'es_host' going forward"), call. = FALSE)
   }
   
+  # reset ping result in elastic_env
+  elastic_env$ping_result <- NULL
+  
   # strip off transport if found
   if (grepl("^http[s]?://", es_host)) {
     message("Found http or https on es_host, stripping off, see the docs")
     es_host <- sub("^http[s]?://", "", es_host)
+  }
+  
+  # normalize es_path
+  if (!is.null(es_path)) {
+    if (grepl("/$", es_path)) {
+      message("Normalizing path: stripping trailing slash")
+      es_path <- sub("/$", "", es_path)
+    }
   }
   
   auth <- es_auth(es_host = es_host, es_port = es_port, es_path = es_path,

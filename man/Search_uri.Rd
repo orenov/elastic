@@ -9,9 +9,8 @@ Search_uri(index = NULL, type = NULL, q = NULL, df = NULL,
   source = NULL, fields = NULL, sort = NULL, track_scores = NULL,
   timeout = NULL, terminate_after = NULL, from = NULL, size = NULL,
   search_type = NULL, lowercase_expanded_terms = NULL,
-  analyze_wildcard = NULL, version = FALSE, lenient = FALSE,
-  raw = FALSE, asdf = FALSE, search_path = "_search",
-  stream_opts = list(), ...)
+  analyze_wildcard = NULL, version = NULL, lenient = FALSE, raw = FALSE,
+  asdf = FALSE, search_path = "_search", stream_opts = list(), ...)
 }
 \arguments{
 \item{index}{Index name, one or more}
@@ -39,7 +38,7 @@ scoring of the hits was computed. Default: \code{FALSE}}
 \code{_source} field. You can also retrieve part of the document by 
 using \code{_source_include} & \code{_source_exclude} (see the \code{body} 
 documentation for more details). You can also include a comma-delimited 
-string of fields from the source document  that you want back. See also 
+string of fields from the source document that you want back. See also 
 the \strong{fields} parameter}
 
 \item{fields}{(character) The selective stored fields of the document to 
@@ -126,7 +125,13 @@ Search_uri(index="shakespeare", type="scene")
 Search_uri(index="shakespeare", type="line")
 
 ## Return certain fields
-Search_uri(index="shakespeare", fields=c('play_name','speaker'))
+if (gsub("\\\\.", "", ping()$version$number) < 500) {
+  ### ES < v5
+  Search_uri(index="shakespeare", fields=c('play_name','speaker'))
+} else {
+  ### ES > v5
+  Search_uri(index="shakespeare", source=c('play_name','speaker'))
+}
 
 ## Search many indices
 Search_uri(index = "gbif")$hits$total
@@ -134,6 +139,7 @@ Search_uri(index = "shakespeare")$hits$total
 Search_uri(index = c("gbif", "shakespeare"))$hits$total
 
 ## search_type
+## NOTE: If you're in ES V5 or greater, see \\code{?fielddata}
 Search_uri(index="shakespeare", search_type = "query_then_fetch")
 Search_uri(index="shakespeare", search_type = "dfs_query_then_fetch")
 # Search_uri(index="shakespeare", search_type = "scan") # only when scrolling
@@ -218,7 +224,8 @@ res <- Search_uri(config = progress(), size = 5000)
 }
 }
 \seealso{
-\code{\link{Search}} \code{\link{Search_template}}
-\code{\link{count}}
-}
+\code{\link{fielddata}}
 
+\code{\link{Search}} \code{\link{Search_template}}
+\code{\link{count}} \code{\link{fielddata}}
+}

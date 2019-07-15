@@ -36,7 +36,9 @@ Search <- function(index=NULL, type=NULL, q=NULL, df=NULL, analyzer=NULL,
     stream_opts, ...)
   if (!is.null(time_scroll)) attr(tmp, "scroll") <- time_scroll
   # //TODO remember Search
-  tmp$hits$total <- tryCatch(tmp$hits$total$value, error = function(e) 100000)
+  if (!raw) {
+    tmp$hits$total <- tmp$hits$total$value
+  }
   return(tmp)
 }
 
